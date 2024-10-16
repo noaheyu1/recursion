@@ -45,6 +45,17 @@ def group_sum_6(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
+    # base case
+    if start >= len(nums):
+        # return t or f dependent on if sum = target
+        return target == 0
+    # make sure 6 is included
+    if nums[start] == 6:
+        return group_sum(start + 1, nums, target - nums[start])
+    # decision we try and undo
+    if group_sum(start + 1, nums, target - nums[start]):
+        return True
+    return group_sum(start + 1, nums, target)
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
