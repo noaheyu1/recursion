@@ -68,16 +68,14 @@ def group_no_adj(start, nums, target):
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
     #base case
-
-    if target == 0:
-        return True
     if start >= len(nums):
-        return False
-    
+        return target == 0
+
     if nums[start] <= target: #continues if less than target
         current = group_no_adj(start + 2, nums, target - nums[start])
         if current:
             return True
+        
     skip = group_no_adj(start + 1, nums, target)
     return skip
 
@@ -119,6 +117,24 @@ def group_sum_clump(start, nums, target):
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
 
+    if start >= len(nums):
+        return target == 0
+    crt = nums[start]
+    count = 1
+
+    for i in range(start + 1, len(nums)):
+        if nums[i] == crt:
+            count += 1
+        else:
+            break
+
+    if group_sum_clump(start + count, nums, target - crt*count):
+        return True
+
+    return group_sum_clump(start + count, nums, target)
+
+
+
 
 # TODO: Modify this function
 def split_array(nums):
@@ -155,6 +171,16 @@ def split_odd_10(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+
+    def helper(idx, group1, group2):
+        if idx == len(nums):
+            return (sum(group1) % 10 == 0 and sum(group2) % 2 == 1) or (sum(group2) % 10 == 0 and sum(group1) % 2 == 1)
+    
+        return helper(idx + 1, group1 + [nums[idx]], group2) or helper(idx + 1, group1, group2 + [nums[idx]])
+
+    return helper(0, [], [])
+# redo
+
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
