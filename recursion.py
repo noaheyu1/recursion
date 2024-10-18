@@ -67,7 +67,19 @@ def group_no_adj(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
+    #base case
 
+    if target == 0:
+        return True
+    if start >= len(nums):
+        return False
+    
+    if nums[start] <= target: #continues if less than target
+        current = group_no_adj(start + 2, nums, target - nums[start])
+        if current:
+            return True
+    skip = group_no_adj(start + 1, nums, target)
+    return skip
 
 def group_sum_5(start, nums, target):
     """
