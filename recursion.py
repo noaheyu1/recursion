@@ -35,7 +35,6 @@ def group_sum(start, nums, target):
     return group_sum(start + 1, nums, target)
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_sum_6(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to the
@@ -51,11 +50,11 @@ def group_sum_6(start, nums, target):
         return target == 0
     # make sure 6 is included
     if nums[start] == 6:
-        return group_sum(start + 1, nums, target - nums[start])
+        return group_sum_6(start + 1, nums, target - nums[start])
     # decision we try and undo
-    if group_sum(start + 1, nums, target - nums[start]):
+    if group_sum_6(start + 1, nums, target - nums[start]):
         return True
-    return group_sum(start + 1, nums, target)
+    return group_sum_6(start + 1, nums, target)
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
@@ -70,7 +69,6 @@ def group_no_adj(start, nums, target):
     """
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_sum_5(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -80,6 +78,20 @@ def group_sum_5(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
+    # base case
+    if start >= len(nums):
+        # return t or f dependent on if sum = target
+        return target == 0
+    # make sure 5 is included
+    if nums[start] % 5 == 0:
+        if start >= len(nums) - 1 or nums[start + 1] != 1:
+            return group_sum_5(start + 1, nums, target - nums[start])
+        else:  # all remaining instances are instances of 5,1 and the 1 should not be counted
+            return group_sum_5(start + 2, nums, target - nums[start])
+    # decision we try and undo
+    if group_sum_5(start + 1, nums, target - nums[start]):
+        return True
+    return group_sum_5(start + 1, nums, target)
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
@@ -106,6 +118,19 @@ def split_array(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+    if len(nums) == 1:
+        return False
+    elif len(nums) == 0:
+        return True
+
+    digit = nums[len(nums) - 1]
+    nums.pop()
+
+    if digit in nums:
+        nums.remove(digit)
+        return split_array(nums)
+    elif True:
+        pass  # UNFINISHED
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
