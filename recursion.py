@@ -133,7 +133,6 @@ def group_sum_clump(start, nums, target):
     return group_sum_clump(start + count, nums, target)
 
 
-# TODO: Modify this function
 def split_array(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
@@ -187,7 +186,6 @@ def split_odd_10(nums):
 # redo
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def split_53(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
