@@ -57,7 +57,6 @@ def group_sum_6(start, nums, target):
     return group_sum_6(start + 1, nums, target)
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_no_adj(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -67,6 +66,17 @@ def group_no_adj(start, nums, target):
     pre: start >= 0, len(nums) >= 0, target >= 0, nums will only contain ints
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
+    # base case
+    if start >= len(nums):
+        return target == 0
+
+    if nums[start] <= target:  # continues if less than target
+        current = group_no_adj(start + 2, nums, target - nums[start])
+        if current:
+            return True
+
+    skip = group_no_adj(start + 1, nums, target)
+    return skip
 
 
 def group_sum_5(start, nums, target):
@@ -94,7 +104,6 @@ def group_sum_5(start, nums, target):
     return group_sum_5(start + 1, nums, target)
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def group_sum_clump(start, nums, target):
     """
     Given a list of ints, determine if there exists a group of some ints that sum to
@@ -107,6 +116,22 @@ def group_sum_clump(start, nums, target):
     post: return True if nums has a group of ints that sum to target, False otherwise
     """
 
+    if start >= len(nums):
+        return target == 0
+    crt = nums[start]
+    count = 1
+
+    for i in range(start + 1, len(nums)):
+        if nums[i] == crt:
+            count += 1
+        else:
+            break
+
+    if group_sum_clump(start + count, nums, target - crt * count):
+        return True
+
+    return group_sum_clump(start + count, nums, target)
+
 
 # TODO: Modify this function
 def split_array(nums):
@@ -118,22 +143,24 @@ def split_array(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
-    if len(nums) == 1:
-        return False
-    elif len(nums) == 0:
-        return True
+    quota = sum(nums) / 2
 
-    digit = nums[len(nums) - 1]
-    nums.pop()
+    def helper(start, current):
+        if quota == current:  # base case
+            return True
+        elif (
+            start >= len(nums) or quota < current
+        ):  # check if out of bounds or sum is too much
+            return False
+        else:
+            if helper(start + 1, current + nums[start]):  # include current element
+                return True
+            else:
+                return helper(start + 1, current)  # don't include current element
 
-    if digit in nums:
-        nums.remove(digit)
-        return split_array(nums)
-    elif True:
-        pass  # UNFINISHED
+    return helper(0, 0)
 
 
-# TODO: Modify this function. You may delete this comment when you are done.
 def split_odd_10(nums):
     """
     Given a list of ints, determine if the numbers can be split evenly into two groups
@@ -143,6 +170,21 @@ def split_odd_10(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+
+    def helper(idx, group1, group2):
+        if idx == len(nums):
+            return (sum(group1) % 10 == 0 and sum(group2) % 2 == 1) or (
+                sum(group2) % 10 == 0 and sum(group1) % 2 == 1
+            )
+
+        return helper(idx + 1, group1 + [nums[idx]], group2) or helper(
+            idx + 1, group1, group2 + [nums[idx]]
+        )
+
+    return helper(0, [], [])
+
+
+# redo
 
 
 # TODO: Modify this function. You may delete this comment when you are done.
@@ -157,3 +199,25 @@ def split_53(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
+    quota = sum(nums) // 2
+
+    def helper(start, current):
+        if quota == current:  # base case
+            return True
+        elif (
+            start >= len(nums) or quota < current
+        ):  # check if out of bounds or sum is too much
+            return False
+        else:
+            if nums[start] % 5 == 0:  # include current element if multiple of 5
+                return helper(start + 1, current + nums[start])
+            elif nums[start] % 3 == 0:  # dont include element if multiple of 3
+                return helper(start + 1, current)
+            else:  # handle  all other numbers
+                if helper(start + 1, current + nums[start]):
+                    return True
+                return helper(start + 1, current)  # don't include current element
+
+    if len(nums) == 0 or sum(nums) % 2 != 0:  # handle empty lists and odd sum lists
+        return False
+    return helper(0, 0)
