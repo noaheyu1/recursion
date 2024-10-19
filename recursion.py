@@ -183,7 +183,7 @@ def split_odd_10(nums):
     return helper(0, [], [])
 
 
-# redo
+# redo sam?
 
 
 def split_53(nums):
